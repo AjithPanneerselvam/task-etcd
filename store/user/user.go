@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/AjithPanneerselvam/todo/store"
+	"github.com/AjithPanneerselvam/task-etcd/store"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/pkg/errors"
 )

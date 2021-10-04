@@ -17,17 +17,19 @@ const (
 )
 
 type GithubLoginHandler struct {
-	githubClient      *github.Client
-	githubCallbackURL string
-	userStore         store.UserStore
+	githubClient            *github.Client
+	githubCallbackURL       string
+	loginSuccessRedirectURL string
+	userStore               store.UserStore
 }
 
 func NewGithubLoginHandler(githubClient *github.Client, githubCallbackURL string,
-	userStore store.UserStore) *GithubLoginHandler {
+	userStore store.UserStore, loginSuccessRedirectURL string) *GithubLoginHandler {
 	return &GithubLoginHandler{
-		githubClient:      githubClient,
-		githubCallbackURL: githubCallbackURL,
-		userStore:         userStore,
+		githubClient:            githubClient,
+		githubCallbackURL:       githubCallbackURL,
+		loginSuccessRedirectURL: loginSuccessRedirectURL,
+		userStore:               userStore,
 	}
 }
 
@@ -101,12 +103,8 @@ func (g *GithubLoginHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		log.Info("created a new user of id: %v, name: %v", user.ID, user.Name)
 	}
 
-	// http.FileServer(http.Dir("./static"))
-	//	http.ServeFile(w, r, "./static/index.html")
-	//fmt.Fprintf(w, "Login Succeeded")
+	log.Infof("user %v of id %v signed in", userInfo.Name, userInfo.ID)
+	log.Infof("redirecting to URL: %v", g.loginSuccessRedirectURL)
 
-	redirectURL := "http://localhost:8080/home"
-	log.Infof("login redirecting to URL: %v", redirectURL)
-	http.Redirect(w, r, redirectURL, 301)
-
+	http.Redirect(w, r, g.loginSuccessRedirectURL, 301)
 }

@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 services:
-  todo:
+  task-etcd:
     depends_on:
       - etcd 
     build:

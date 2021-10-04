@@ -3,11 +3,11 @@ package main
 import (
 	"net/http"
 
-	"github.com/AjithPanneerselvam/todo/config"
-	"github.com/AjithPanneerselvam/todo/db"
-	"github.com/AjithPanneerselvam/todo/router"
-	"github.com/AjithPanneerselvam/todo/store/user"
-	"github.com/AjithPanneerselvam/todo/util"
+	"github.com/AjithPanneerselvam/task-etcd/config"
+	"github.com/AjithPanneerselvam/task-etcd/db"
+	"github.com/AjithPanneerselvam/task-etcd/router"
+	"github.com/AjithPanneerselvam/task-etcd/store/user"
+	"github.com/AjithPanneerselvam/task-etcd/util"
 
 	log "github.com/sirupsen/logrus"
 )
