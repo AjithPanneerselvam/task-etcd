@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/AjithPanneerselvam/todo/client/github"
-	"github.com/AjithPanneerselvam/todo/config"
-	"github.com/AjithPanneerselvam/todo/handler/home"
-	"github.com/AjithPanneerselvam/todo/handler/login"
-	"github.com/AjithPanneerselvam/todo/store"
+	"github.com/AjithPanneerselvam/task-etcd/client/github"
+	"github.com/AjithPanneerselvam/task-etcd/config"
+	"github.com/AjithPanneerselvam/task-etcd/handler/home"
+	"github.com/AjithPanneerselvam/task-etcd/handler/login"
+	"github.com/AjithPanneerselvam/task-etcd/store"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/v5/middleware"
 )

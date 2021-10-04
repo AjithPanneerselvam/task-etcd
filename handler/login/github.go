@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/AjithPanneerselvam/todo/client/github"
-	"github.com/AjithPanneerselvam/todo/store"
-	userstore "github.com/AjithPanneerselvam/todo/store/user"
+	"github.com/AjithPanneerselvam/task-etcd/client/github"
+	"github.com/AjithPanneerselvam/task-etcd/store"
+	userstore "github.com/AjithPanneerselvam/task-etcd/store/user"
 	log "github.com/sirupsen/logrus"
 )
 
