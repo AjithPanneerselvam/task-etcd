@@ -9,7 +9,7 @@ make build
 
 **Run**
 
-1. Create a .env file and add Github Client ID and Secret like follows
+1. Create a .env file and add Github Client ID and Secret as follows.
 ```
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
 GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>

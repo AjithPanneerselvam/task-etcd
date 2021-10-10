@@ -34,11 +34,11 @@ func New(oAuthURL string, apiURL string, clientID string, clientSecret string, t
 	}
 }
 
-func (c *Client) GetAccessToken(ctx context.Context, code string) (string, error) {
+func (c *Client) GetAccessToken(ctx context.Context, authCode string) (string, error) {
 	var accessTokenRequest = AccessTokenRequest{
 		ClientID:     c.clientID,
 		ClientSecret: c.clientSecret,
-		Code:         code,
+		Code:         authCode,
 	}
 
 	body, err := json.Marshal(accessTokenRequest)

@@ -59,6 +59,7 @@ func (g *GithubLoginHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	log.Debugf("Auth code: %v", code)
 
 	githubAccessToken, err := g.githubClient.GetAccessToken(ctx, code[0])
 	if err != nil {
@@ -67,6 +68,7 @@ func (g *GithubLoginHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	g.githubClient.SetAccessToken(ctx, githubAccessToken)
+	log.Debugf("Github access token: %v", githubAccessToken)
 
 	userInfo, err := g.githubClient.GetUserInfo(ctx)
 	if err != nil {
