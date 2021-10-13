@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/AjithPanneerselvam/task-etcd/auth"
 	"github.com/AjithPanneerselvam/task-etcd/client/github"
 	"github.com/AjithPanneerselvam/task-etcd/config"
 	"github.com/AjithPanneerselvam/task-etcd/handler/home"
@@ -40,9 +41,15 @@ func (r *Router) AddRoutes(config *config.Config, userStore store.UserStore) {
 	githubClient := github.New(config.GithubOAuthURL, config.GithubAPIURL, config.GithubClientID,
 		config.GithubClientSecret, config.GithubTimeoutInSec)
 
-	githubLoginHandler := login.NewGithubLoginHandler(githubClient, githubCallbackURL, userStore, loginSuccessRedirectURL)
+	jwtAuthenticator := auth.NewJWTAuth(config.JWTSecretyKey)
+
+	githubLoginHandler := login.NewGithubLoginHandler(githubClient, githubCallbackURL,
+		jwtAuthenticator, userStore, loginSuccessRedirectURL)
+
+	homePageHandler := home.New()
 
 	r.Use(middleware.Logger)
+
 	r.Get("/", githubLoginHandler.HomePage)
 
 	r.Route("/login", func(r chi.Router) {
@@ -50,6 +57,10 @@ func (r *Router) AddRoutes(config *config.Config, userStore store.UserStore) {
 		r.Get("/github/callback", githubLoginHandler.Callback)
 	})
 
-	homePageHandler := home.New()
+	// TODO: See if the endpoint can be refactored
 	r.Get("/home", homePageHandler.Handle)
+
+	r.Group(func(r chi.Router) {
+		r.Use(auth.Authenticator)
+	})
 }

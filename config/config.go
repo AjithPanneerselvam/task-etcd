@@ -18,6 +18,9 @@ type Config struct {
 	GithubOAuthURL     string `envconfig:"GITHUB_OAUTH_URL" required:"true"`
 	GithubTimeoutInSec int32  `envconfig:"GITHUB_TIMEOUT_IN_SEC" required:"true"`
 	GithubAPIURL       string `envconfig:"GITHUB_API_URL" required:"true"`
+
+	JWTSecretyKey   string `envconfig:"JWT_SECRET_KEY" required:"true"`
+	JWTExpiryInMins int64  `envconfig:"JWT_EXPIRY_IN_MINS" required:"true"`
 }
 
 // Load loads the config

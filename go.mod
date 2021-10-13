@@ -20,6 +20,8 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.14.5 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/lestrrat-go/jwx v1.2.7
+	github.com/lestrrat-go/pdebug v0.0.0-20200204225717-4d6bd78da58d // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
 	go.uber.org/zap v1.19.1 // indirect

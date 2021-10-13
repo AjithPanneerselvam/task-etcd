@@ -26,6 +26,9 @@ services:
         GITHUB_OAUTH_URL: "https://github.com/login/oauth"
         GITHUB_API_URL: "https://api.github.com"
 
+        JWT_SECRET_KEY: "${JWT_SECRET_KEY}"
+        JWT_EXPIRY_IN_MINS: 2880
+
     networks:
       - app-tier
   

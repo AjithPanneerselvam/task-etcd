@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/AjithPanneerselvam/task-etcd/auth"
 	"github.com/AjithPanneerselvam/task-etcd/client/github"
 	"github.com/AjithPanneerselvam/task-etcd/store"
 	userstore "github.com/AjithPanneerselvam/task-etcd/store/user"
@@ -17,13 +18,16 @@ const (
 )
 
 type GithubLoginHandler struct {
-	githubClient            *github.Client
-	githubCallbackURL       string
+	githubClient      *github.Client
+	githubCallbackURL string
+
+	jwtAuthenticator *auth.JWTAuth
+
 	loginSuccessRedirectURL string
 	userStore               store.UserStore
 }
 
-func NewGithubLoginHandler(githubClient *github.Client, githubCallbackURL string,
+func NewGithubLoginHandler(githubClient *github.Client, githubCallbackURL string, jwtAuthenticator *auth.JWTAuth,
 	userStore store.UserStore, loginSuccessRedirectURL string) *GithubLoginHandler {
 	return &GithubLoginHandler{
 		githubClient:            githubClient,
