@@ -2,13 +2,13 @@ package router
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/AjithPanneerselvam/task-etcd/auth"
 	"github.com/AjithPanneerselvam/task-etcd/client/github"
 	"github.com/AjithPanneerselvam/task-etcd/config"
 	"github.com/AjithPanneerselvam/task-etcd/handler/login"
+	"github.com/AjithPanneerselvam/task-etcd/handler/task"
 	"github.com/AjithPanneerselvam/task-etcd/store"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/v5/middleware"
@@ -21,11 +21,6 @@ const (
 
 type Router struct {
 	*chi.Mux
-}
-
-// FileSystem custom file system handler
-type FileSystem struct {
-	fs http.FileSystem
 }
 
 func NewRouter() *Router {
@@ -45,17 +40,24 @@ func (r *Router) AddRoutes(config *config.Config, userStore store.UserStore) {
 
 	githubLoginHandler := login.NewGithubLoginHandler(githubClient, githubCallbackURL,
 		jwtAuthenticator, loginSuccessRedirectURL)
+	taskHandler := task.NewTaskHandler()
 
 	r.Use(middleware.Logger)
 
 	r.Get("/", githubLoginHandler.Home)
 
+	// login routes
 	r.Route("/login", func(r chi.Router) {
 		r.Get("/github", githubLoginHandler.Login)
 		r.Get("/github/callback", githubLoginHandler.Callback)
 	})
 
+	// task routes
 	r.Group(func(r chi.Router) {
-		r.Use(auth.Authenticator)
+		r.Use(jwtAuthenticator.Authenticator)
+
+		r.Route("/task", func(r chi.Router) {
+			r.Get("/create", taskHandler.CreateTask)
+		})
 	})
 }

@@ -87,7 +87,7 @@ func (g *GithubLoginHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		"userID": userInfo.ID,
 	}
 
-	_, jwtTokenString, err := g.jwtAuthenticator.CreateToken(claims)
+	jwtTokenString, err := g.jwtAuthenticator.CreateToken(claims)
 	if err != nil {
 		log.Error("error creating jwt token: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
