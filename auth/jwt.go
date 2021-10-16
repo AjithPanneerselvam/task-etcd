@@ -24,7 +24,7 @@ var (
 )
 
 type JWTAuth struct {
-	secretKey          string
+	secretKey          []byte
 	signatureAlgorithm jwa.SignatureAlgorithm
 
 	expiryDuration time.Duration
@@ -32,8 +32,8 @@ type JWTAuth struct {
 
 func NewJWTAuth(secretKey string, expiryDuration time.Duration) *JWTAuth {
 	return &JWTAuth{
-		signatureAlgorithm: jwa.SignatureAlgorithm("HS256"),
-		secretKey:          secretKey,
+		signatureAlgorithm: jwa.HS256,
+		secretKey:          []byte(secretKey),
 		expiryDuration:     expiryDuration,
 	}
 }
@@ -48,8 +48,15 @@ func (j *JWTAuth) CreateToken(claims map[string]interface{}) (jwt.Token, string,
 	currentTime := time.Now().UTC().Unix()
 
 	// standard claims
-	token.Set(jwt.IssuedAtKey, currentTime)
-	token.Set(jwt.ExpirationKey, currentTime+int64(j.expiryDuration))
+	err := token.Set(jwt.IssuedAtKey, currentTime)
+	if err != nil {
+		return nil, "", err
+	}
+
+	err = token.Set(jwt.ExpirationKey, currentTime+int64(j.expiryDuration))
+	if err != nil {
+		return nil, "", err
+	}
 
 	signedToken, err := jwt.Sign(token, j.signatureAlgorithm, j.secretKey)
 	if err != nil {
