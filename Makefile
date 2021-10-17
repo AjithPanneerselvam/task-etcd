@@ -1,5 +1,5 @@
 build: 
-	docker build -t code_task-etcd .
+	docker build -t task-etcd .
 
 run: 
-	docker-compose -p code up task-etcd 
+	docker-compose up task-etcd  

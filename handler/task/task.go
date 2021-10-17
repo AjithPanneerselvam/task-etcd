@@ -63,7 +63,6 @@ func (t *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusAccepted)
-
 	err = json.NewEncoder(w).Encode(taskCreatedResponse)
 	if err != nil {
 		log.Errorf("error encoding the task created response: %v", err)
@@ -73,7 +72,6 @@ func (t *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 
 func (t *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
 	userID, err := fetchUserIDFromCtx(ctx)
 	if err != nil {
 		log.Errorf("error fetching user id from ctx: %v", err)
@@ -102,7 +100,6 @@ func (t *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 
 func (t *TaskHandler) GetAllTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
 	userID, err := fetchUserIDFromCtx(ctx)
 	if err != nil {
 		log.Errorf("error fetching user id from ctx: %v", err)
@@ -128,7 +125,6 @@ func (t *TaskHandler) GetAllTasks(w http.ResponseWriter, r *http.Request) {
 
 func (t *TaskHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
 	userID, err := fetchUserIDFromCtx(ctx)
 	if err != nil {
 		log.Errorf("error fetching user id from ctx: %v", err)
@@ -139,7 +135,6 @@ func (t *TaskHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	taskID := chi.URLParam(r, "task-id")
 
 	w.WriteHeader(http.StatusOK)
-
 	err = t.taskStore.DeleteTask(ctx, userID, taskID)
 	if err != nil {
 		log.Errorf("error encoding the tasks response: %v", err)
@@ -148,7 +143,33 @@ func (t *TaskHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *TaskHandler) UpdateTask(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	userID, err := fetchUserIDFromCtx(ctx)
+	if err != nil {
+		log.Errorf("error fetching user id from ctx: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
+	taskID := chi.URLParam(r, "task-id")
+
+	var task store.Task
+	err = json.NewDecoder(r.Body).Decode(&task)
+	if err != nil {
+		log.Errorf("error unmarshalling task from request body: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	task.ID = taskID
+
+	err = t.taskStore.CreateTask(ctx, userID, task)
+	if err != nil {
+		log.Error("error storing task %v in the store: %v", task.ID, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func fetchUserIDFromCtx(ctx context.Context) (string, error) {

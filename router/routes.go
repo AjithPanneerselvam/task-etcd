@@ -61,7 +61,7 @@ func (r *Router) AddRoutes(config *config.Config, taskStore store.TaskStore) {
 			r.Get("/get/{task-id}", taskHandler.GetTask)
 			r.Get("/get/all", taskHandler.GetAllTasks)
 			r.Delete("/delete/{task-id}", taskHandler.DeleteTask)
-			r.Patch("/update/{task-id}", taskHandler.UpdateTask)
+			r.Put("/update/{task-id}", taskHandler.UpdateTask)
 		})
 	})
 }
