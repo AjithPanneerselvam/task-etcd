@@ -86,7 +86,6 @@ func (j *JWTAuth) Authenticator(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-		log.Debug("parsed token: %v", token)
 
 		if err := jwt.Validate(token); err != nil {
 			log.Errorf("error validating token: %v", err)

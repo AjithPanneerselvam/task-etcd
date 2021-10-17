@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/AjithPanneerselvam/task-etcd/auth"
@@ -51,6 +52,10 @@ func (r *Router) AddRoutes(config *config.Config, taskStore store.TaskStore) {
 		r.Get("/github", githubLoginHandler.Login)
 		r.Get("/github/callback", githubLoginHandler.Callback)
 	})
+
+	// serve  static  sites
+	fileServer := http.FileServer(http.Dir("./static/"))
+	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	// task routes
 	r.Group(func(r chi.Router) {

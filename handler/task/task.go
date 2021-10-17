@@ -88,7 +88,7 @@ func (t *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Debugf("task of id %v: %v retrieved from store", task.ID, task)
+	log.Debugf("task of id %v retrieved from store", task.ID)
 
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(task)
@@ -113,7 +113,7 @@ func (t *TaskHandler) GetAllTasks(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Debugf("tasks %v retrieved from store", tasks)
+	log.Debugf("tasks retrieved from store")
 
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(tasks)

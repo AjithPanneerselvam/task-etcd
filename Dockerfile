@@ -1,14 +1,16 @@
-FROM golang:1.16-alpine as builder 
+FROM golang:1.16-alpine 
 
-COPY go.mod go.sum /go/src/github.com/AjithPanneerselvam/task-etcd/
 WORKDIR /go/src/github.com/AjithPanneerselvam/task-etcd 
 
+COPY go.mod go.sum /go/src/github.com/AjithPanneerselvam/task-etcd/
 RUN go mod download
-COPY . /go/src/github.com/AjithPanneerselvam/task-etcd/ 
 
+COPY . /go/src/github.com/AjithPanneerselvam/task-etcd/ 
 RUN go build -o /task-etcd
+
+COPY /static/index.html /static/
 
 EXPOSE 8080
 
-CMD [ "/task-etcd" ]
-
+# Command to run the executable
+ENTRYPOINT ["/task-etcd"]
