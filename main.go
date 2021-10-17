@@ -6,7 +6,7 @@ import (
 	"github.com/AjithPanneerselvam/task-etcd/config"
 	"github.com/AjithPanneerselvam/task-etcd/db"
 	"github.com/AjithPanneerselvam/task-etcd/router"
-	"github.com/AjithPanneerselvam/task-etcd/store/user"
+	"github.com/AjithPanneerselvam/task-etcd/store/task"
 	"github.com/AjithPanneerselvam/task-etcd/util"
 
 	log "github.com/sirupsen/logrus"
@@ -28,10 +28,10 @@ func main() {
 	}
 	log.Info("etcd client instantiated")
 
-	userStore := user.New(db)
+	taskStore := task.New(db)
 
 	router := router.NewRouter()
-	router.AddRoutes(config, userStore)
+	router.AddRoutes(config, taskStore)
 
 	log.Infof("starting server at port %v", config.ListenPort)
 	http.ListenAndServe(":"+config.ListenPort, router)

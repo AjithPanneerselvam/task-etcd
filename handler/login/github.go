@@ -84,7 +84,7 @@ func (g *GithubLoginHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	log.Infof("user %v of id %v signed in", userInfo.Name, userInfo.ID)
 
 	claims := map[string]interface{}{
-		"userID": userInfo.ID,
+		auth.ClaimsKeyUserID: strconv.Itoa(userInfo.ID),
 	}
 
 	jwtTokenString, err := g.jwtAuthenticator.CreateToken(claims)

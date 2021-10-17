@@ -1,4 +1,4 @@
-# Todo App with etcd backend 
+# Task App with etcd store and Github OAuth 
 
 ## Build & Run
 
@@ -13,6 +13,7 @@ make build
 ```
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
 GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
+JWT_SECRET_KEY=<JWT_SECRET_KEY>
 ```
 
 2. Run the service

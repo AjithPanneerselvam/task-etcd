@@ -12,6 +12,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	ClaimsKeyUserID = "userID"
+)
+
 type contextKey struct {
 	name string
 }
@@ -96,6 +100,7 @@ func (j *JWTAuth) Authenticator(next http.Handler) http.Handler {
 	})
 }
 
+// FetchBearerToken fetches the bearer token from the request header
 func FetchBearerToken(r *http.Request) string {
 	bearer := r.Header.Get("Authorization")
 	if len(bearer) > 7 && strings.ToUpper(bearer[0:6]) == "BEARER" {
@@ -105,21 +110,34 @@ func FetchBearerToken(r *http.Request) string {
 	return ""
 }
 
-func FetchTokenFromContext(ctx context.Context) (jwt.Token, map[string]interface{}, error) {
-	token, ok := ctx.Value(TokenCtxKey).(jwt.Token)
-	if !ok {
-		return nil, nil, errors.New("error type asserting token into jwt token")
+func FetchClaimValFromCtx(ctx context.Context, claimKey string) (interface{}, error) {
+	token, err := FetchTokenFromCtx(ctx)
+	if err != nil {
+		return "", err
 	}
 
-	var err error
-	var claims = make(map[string]interface{})
+	claims := make(map[string]interface{})
 
 	if token != nil {
 		claims, err = token.AsMap(context.Background())
 		if err != nil {
-			return token, nil, err
+			return "", err
 		}
 	}
 
-	return token, claims, err
+	claimVal, ok := claims[claimKey]
+	if !ok {
+		return "", errors.New("")
+	}
+
+	return claimVal, nil
+}
+
+func FetchTokenFromCtx(ctx context.Context) (jwt.Token, error) {
+	token, ok := ctx.Value(TokenCtxKey).(jwt.Token)
+	if !ok {
+		return nil, errors.New("error type asserting token into jwt token")
+	}
+
+	return token, nil
 }

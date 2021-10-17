@@ -14,22 +14,17 @@ type User struct {
 }
 
 type Task struct {
-	ID          string
-	Name        string
-	Description string
-	IsCompleted bool
-}
-
-type UserStore interface {
-	CreateUser(context.Context, User) error
-	GetInfoByID(ctx context.Context, userID string) (*User, error)
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	IsCompleted bool   `json:"isCompleted"`
 }
 
 type TaskStore interface {
-	CreateTask(ctx context.Context, userID string, task Task) (string, error)
-	ReadTask(ctx context.Context, userID string, taskID string) (Task, error)
+	CreateTask(ctx context.Context, userID string, task Task) error
+	ReadTask(ctx context.Context, userID string, taskID string) (*Task, error)
 	ReadAllTasks(ctx context.Context, userID string) ([]Task, error)
 	UpdateTaskStatus(ctx context.Context, userID string, taskID string,
 		taskStatus bool) (string, error)
-	DeleteTask(ctx context.Context, userID string, taskID string) (string, error)
+	DeleteTask(ctx context.Context, userID string, taskID string) error
 }

@@ -29,7 +29,7 @@ func NewRouter() *Router {
 	}
 }
 
-func (r *Router) AddRoutes(config *config.Config, userStore store.UserStore) {
+func (r *Router) AddRoutes(config *config.Config, taskStore store.TaskStore) {
 	githubCallbackURL := fmt.Sprintf(GithubCallbackURLFormat, config.HostName, config.ListenPort)
 	loginSuccessRedirectURL := fmt.Sprintf(LoginSuccessRedirectURLFormat, config.HostName, config.ListenPort)
 
@@ -40,7 +40,7 @@ func (r *Router) AddRoutes(config *config.Config, userStore store.UserStore) {
 
 	githubLoginHandler := login.NewGithubLoginHandler(githubClient, githubCallbackURL,
 		jwtAuthenticator, loginSuccessRedirectURL)
-	taskHandler := task.NewTaskHandler()
+	taskHandler := task.NewTaskHandler(taskStore)
 
 	r.Use(middleware.Logger)
 
@@ -57,7 +57,11 @@ func (r *Router) AddRoutes(config *config.Config, userStore store.UserStore) {
 		r.Use(jwtAuthenticator.Authenticator)
 
 		r.Route("/task", func(r chi.Router) {
-			r.Get("/create", taskHandler.CreateTask)
+			r.Post("/create", taskHandler.CreateTask)
+			r.Get("/get/{task-id}", taskHandler.GetTask)
+			r.Get("/get/all", taskHandler.GetAllTasks)
+			r.Delete("/delete/{task-id}", taskHandler.DeleteTask)
+			r.Patch("/update/{task-id}", taskHandler.UpdateTask)
 		})
 	})
 }
