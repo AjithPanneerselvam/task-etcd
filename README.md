@@ -9,7 +9,7 @@ make build
 
 **Run**
 
-1. Create a .env file and add Github Client ID and Secret as follows.
+1. Create a .env file and set values for the following environment variables.
 ```
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
 GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
@@ -20,4 +20,3 @@ JWT_SECRET_KEY=<JWT_SECRET_KEY>
 ``` bash 
 make run
 ```
-

@@ -47,13 +47,12 @@ func (t *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	task.ID = uuid.NewString()
 	task.IsCompleted = false
 
-	err = t.taskStore.CreateTask(ctx, userID, task)
+	err = t.taskStore.UpsertTask(ctx, userID, task)
 	if err != nil {
 		log.Error("error storing task %v in the store: %v", task.ID, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
 	log.Infof("task of id %v is successfully stored", task.ID)
 
 	taskCreatedResponse := struct {
@@ -162,7 +161,7 @@ func (t *TaskHandler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	}
 	task.ID = taskID
 
-	err = t.taskStore.CreateTask(ctx, userID, task)
+	err = t.taskStore.UpsertTask(ctx, userID, task)
 	if err != nil {
 		log.Error("error storing task %v in the store: %v", task.ID, err)
 		w.WriteHeader(http.StatusInternalServerError)

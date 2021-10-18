@@ -36,7 +36,7 @@ func New(db clientv3.KV) store.TaskStore {
 	}
 }
 
-func (t *taskStore) CreateTask(ctx context.Context, userID string, task store.Task) error {
+func (t *taskStore) UpsertTask(ctx context.Context, userID string, task store.Task) error {
 	taskInBytes, err := json.Marshal(task)
 	if err != nil {
 		return errors.Wrap(err, "error marshalling task")
@@ -97,11 +97,6 @@ func (t *taskStore) ReadAllTasks(ctx context.Context, userID string) ([]store.Ta
 	}
 
 	return tasks, nil
-}
-
-func (t *taskStore) UpdateTaskStatus(ctx context.Context, userID string, taskID string,
-	taskStatus bool) (string, error) {
-	return "", nil
 }
 
 func (t *taskStore) DeleteTask(ctx context.Context, userID string, taskID string) error {

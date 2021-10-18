@@ -22,7 +22,9 @@ type Client struct {
 	accessToken  string
 }
 
-func New(oAuthURL string, apiURL string, clientID string, clientSecret string, timeoutInSec int32) *Client {
+func New(oAuthURL string, apiURL string, clientID string, clientSecret string,
+	timeoutInSec int32) *Client {
+
 	return &Client{
 		oAuthURL:     oAuthURL,
 		apiURL:       apiURL,
